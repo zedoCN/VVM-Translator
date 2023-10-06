@@ -31,6 +31,7 @@ public class Main {
         //langProperties.store(Files.newOutputStream(p));
         //readAllLanguages();
         useAllLanguages(pluginPath);
+        useAllLanguages(vvmPath);
         //readAllLanguages(pluginPath);
         //findRemainingLang();
     }
