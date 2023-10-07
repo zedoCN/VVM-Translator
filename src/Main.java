@@ -9,34 +9,42 @@ import java.util.jar.JarOutputStream;
 
 
 public class Main {
-    static Path vvmPath = Path.of("D:\\Program Files\\visualvm\\visualvm_217");
-    static Path workPath = Path.of("./work");
-    static Path langPath = workPath.resolve("lang");
-    static Path backupPath = workPath.resolve("backup");
-    static Path tempPath = workPath.resolve("temp");
-    static Path pluginPath = Path.of("C:\\Users\\zedoC\\AppData\\Roaming\\VisualVM\\2.1.7\\modules");
-
-    static {
-        try {
-            Files.createDirectories(backupPath);
-            Files.createDirectories(langPath);
-            Files.createDirectories(tempPath);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    static Path vvmPath;
+    static Path langPath = Path.of("./lang");
+    static Path backupPath = Path.of("./backup");
+    static Path vvmAppDataPath;
+    static String version;
+    private static final String VISUALVM_DEFAULT_USERDIR = "visualvm_default_userdir";
 
     public static void main(String[] args) throws IOException {
+        setVvmPath(Path.of("D:\\Program Files\\visualvm\\visualvm_217_src"));
 
+
+        //createBackup();
+        //rollbackFromBackup();
         //langProperties.store(Files.newOutputStream(p));
-        //readAllLanguages();
-        useAllLanguages(pluginPath);
-        useAllLanguages(vvmPath);
+        readAllLanguages(vvmPath);
+        //readAllLanguages(vvmAppDataPath);
+        //useAllLanguages(pluginPath);
+        //useAllLanguages(vvmPath);
         //readAllLanguages(pluginPath);
         //findRemainingLang();
     }
 
-    private static void findRemainingLang() throws IOException {
+    public static void setVvmPath(Path path) throws IOException {
+        vvmPath = path;
+        try (InputStream inputStream = Files.newInputStream(vvmPath.resolve("etc/visualvm.conf"))) {
+            Properties conf = new Properties();
+            conf.load(inputStream);
+            String userDir = conf.getProperty(VISUALVM_DEFAULT_USERDIR);
+            Path appDataDir = Paths.get(System.getProperty("user.home"), "AppData", "Roaming", "VisualVM");
+            version = userDir.replace("${DEFAULT_USERDIR_ROOT}", "").replaceAll("[\"\\\\/]", "");
+            vvmAppDataPath = appDataDir.resolve(version);
+        }
+    }
+
+
+    public static void findRemainingLang() throws IOException {
         Properties allLang = new Properties();
         allLang.load(Files.newBufferedReader(langPath.resolve("allLang.properties")));
         Properties allLangZH = new Properties();
@@ -82,7 +90,7 @@ public class Main {
         Files.delete(sourceJarFile);
     }
 
-    private static void useAllLanguages(Path path) throws IOException {
+    public static void useAllLanguages(Path path) throws IOException {
         Properties langProperties = new Properties();
         langProperties.load(Files.newBufferedReader(langPath.resolve("allLangZH.properties"), StandardCharsets.UTF_8));
 
@@ -96,7 +104,7 @@ public class Main {
         });
     }
 
-    private static void readAllLanguages(Path path) throws IOException {
+    public static void readAllLanguages(Path path) throws IOException {
         Properties langProperties = new Properties();
         Files.walkFileTree(path, new SimpleFileVisitor<>() {
             @Override
@@ -128,11 +136,19 @@ public class Main {
         jarFile.close();
     }
 
-    private static void createBackup() throws IOException {
-        copyDirectory(vvmPath, backupPath);
+    public static void createBackup() throws IOException {
+        Path backupVvmPath = backupPath.resolve(version);
+        copyDirectory(vvmPath, backupVvmPath.resolve("software"));
+        copyDirectory(vvmAppDataPath, backupVvmPath.resolve("appData"));
     }
 
-    public static void copyDirectory(Path source, Path target) throws IOException {
+    public static void rollbackFromBackup() throws IOException {
+        Path backupVvmPath = backupPath.resolve(version);
+        copyDirectory(backupVvmPath.resolve("software"), vvmPath);
+        copyDirectory(backupVvmPath.resolve("appData"), vvmAppDataPath);
+    }
+
+    private static void copyDirectory(Path source, Path target) throws IOException {
         Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
