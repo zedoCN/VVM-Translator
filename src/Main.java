@@ -17,15 +17,16 @@ public class Main {
     private static final String VISUALVM_DEFAULT_USERDIR = "visualvm_default_userdir";
 
     public static void main(String[] args) throws IOException {
-        setVvmPath(Path.of("D:\\Program Files\\visualvm\\visualvm_217_src"));
+        setVvmPath(Path.of("D:\\Program Files\\visualvm\\visualvm_217"));
 
 
         //createBackup();
         //rollbackFromBackup();
         //langProperties.store(Files.newOutputStream(p));
-        readAllLanguages(vvmPath);
+        //readAllLanguages(vvmPath);
         //readAllLanguages(vvmAppDataPath);
-        //useAllLanguages(pluginPath);
+        useAllLanguages(vvmPath);
+        useAllLanguages(vvmAppDataPath);
         //useAllLanguages(vvmPath);
         //readAllLanguages(pluginPath);
         //findRemainingLang();
