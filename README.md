@@ -51,5 +51,18 @@ VVM-翻译助手是一个基于Java的工具，
   ![](doc/3.png)
 
 * 繁体中文的VVM界面
-  ![](doc/4.png)  
+  ![](doc/4.png)
 
+## 其他
+
+### 控件风格
+
+在语言文件内的```LookAndFeelClassName```和```LookAndFeelCustomsClassName```值可以是以下:
+- ```default```
+- ```javax.swing.plaf.metal.MetalLookAndFeel```
+- ```com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel```
+- ```com.sun.java.swing.plaf.motif.MotifLookAndFeel```
+- ```com.sun.java.swing.plaf.mac.MacLookAndFeel```
+- ```com.sun.java.swing.plaf.gtk.GTKLookAndFeel```
+
+## 欢迎贡献更多语言翻译
