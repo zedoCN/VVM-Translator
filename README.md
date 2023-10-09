@@ -25,14 +25,15 @@ VVM-翻译助手是一个基于Java的工具，
 
 ### 翻译成其他语言
 
-1. 在接下来的操作前都需要设置 VVM 的路径  
-   设置 VVM 的路径```setVvmPath(Path.of("D:\\Program Files\\visualvm\\visualvm_217"))```，  
+1. 在接下来的操作前都需要设置 VVM 的路径
+   设置 VVM 的路径```setVvmPath(Path.of("D:\\Program Files\\visualvm\\visualvm_217"))```，
    必要时请创建备份```createBackup()```，可以使用```rollbackFromBackup()```进行恢复。
 
-2. 使用```readAllLanguages()```读取 VVM 所有的语言，  
+2. 使用```readAllLanguages()```读取 VVM 所有的语言，
    这时你将看到文件```lang/allLang.properties```里面是 VVM 的所有语言。
 
 3. 你可以创建一个翻译语言文件在```lang/translated/(LanguageCode).properties```，然后修改它。
 
-4. 当你不确定还有哪些内容没有翻译完时可以使用```findRemainingLang()```，  
+4. 当你不确定还有哪些内容没有翻译完时可以使用```findRemainingLang()```，
    你可以在文件```lang/remainingLang.properties```查看剩下未翻译的内容。
+
